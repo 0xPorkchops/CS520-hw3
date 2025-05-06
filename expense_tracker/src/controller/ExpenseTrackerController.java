@@ -51,7 +51,31 @@ public class ExpenseTrackerController {
     refresh();
     return true;
   }
-
+  
+  /**
+   * Remove a transaction from the model based on the selected index in the view
+   * 
+   * @return true if transaction was successfully removed, false otherwise
+   */
+  public boolean removeTransaction() {
+    int selectedIndex = view.getSelectedTransactionIndex();
+    
+    if (selectedIndex == -1) {
+      return false;
+    }
+    
+    List<Transaction> transactions = model.getTransactions();
+    
+    if (selectedIndex < transactions.size()) {
+      Transaction transactionToRemove = transactions.get(selectedIndex);
+      model.removeTransaction(transactionToRemove);
+      refresh();
+      return true;
+    }
+    
+    return false;
+  }
+  
   public void applyFilter() {
     List<Transaction> filteredTransactions;
     // If no filter is specified, show all transactions.

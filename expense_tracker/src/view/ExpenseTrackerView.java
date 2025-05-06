@@ -13,6 +13,7 @@ public class ExpenseTrackerView extends JFrame {
 
   private JTable transactionsTable;
   private JButton addTransactionBtn;
+  private JButton removeTransactionBtn;
   private JFormattedTextField amountField;
   private JTextField categoryField;
   private DefaultTableModel model;
@@ -35,7 +36,9 @@ public class ExpenseTrackerView extends JFrame {
     this.model = new DefaultTableModel(columnNames, 0);
 
     transactionsTable = new JTable(model);
+    transactionsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     addTransactionBtn = new JButton("Add Transaction");
+    removeTransactionBtn = new JButton("Remove Transaction");
 
     JLabel amountLabel = new JLabel("Amount:");
     NumberFormat format = NumberFormat.getNumberInstance();
@@ -61,6 +64,7 @@ public class ExpenseTrackerView extends JFrame {
     inputPanel.add(categoryLabel); 
     inputPanel.add(categoryField);
     inputPanel.add(addTransactionBtn);
+    inputPanel.add(removeTransactionBtn);
 
     JPanel buttonPanel = new JPanel();
     buttonPanel.add(amountFilterBtn);
@@ -149,6 +153,19 @@ public class ExpenseTrackerView extends JFrame {
 
   public JButton getAddTransactionBtn() {
     return addTransactionBtn;
+  }
+
+  public JButton getRemoveTransactionBtn() {
+    return removeTransactionBtn;
+  }
+
+  public int getSelectedTransactionIndex() {
+    int selectedRow = transactionsTable.getSelectedRow();
+    // Check if selected row is not the "Total" row (last row) and is valid
+    if (selectedRow >= 0 && selectedRow < model.getRowCount() - 1) {
+      return selectedRow;
+    }
+    return -1; // No valid selection
   }
 
   public void displayFilteredTransactions(List<Transaction> filteredTransactions) {
