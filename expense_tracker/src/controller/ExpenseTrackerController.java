@@ -1,15 +1,13 @@
 package controller;
 
-import view.ExpenseTrackerView;
-
-import java.util.ArrayList;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
-
-import javax.swing.JOptionPane;
-
 import model.ExpenseTrackerModel;
-import model.Transaction;
+import model.Export.TransactionExporter;
 import model.Filter.TransactionFilter;
+import model.Transaction;
+import view.ExpenseTrackerView;
 
 public class ExpenseTrackerController {
   
@@ -21,6 +19,7 @@ public class ExpenseTrackerController {
    * being used in the applyFilter method.
    */
   private TransactionFilter filter;
+  private TransactionExporter exporter;
 
   public ExpenseTrackerController(ExpenseTrackerModel model, ExpenseTrackerView view) {
     this.model = model;
@@ -30,6 +29,10 @@ public class ExpenseTrackerController {
   public void setFilter(TransactionFilter filter) {
     // Sets the Strategy class being used in the applyFilter method.
     this.filter = filter;
+  }
+  
+  public void setExporter(TransactionExporter exporter) {
+    this.exporter = exporter;
   }
 
   public void refresh() {
@@ -76,6 +79,35 @@ public class ExpenseTrackerController {
     return false;
   }
   
+  /**
+   * Export transactions to a file
+   * 
+   * @param fileName The name of the file to export to
+   * @return true if export was successful, false otherwise
+   */
+  public boolean exportTransactions(String fileName) {
+    if (exporter == null) {
+      return false;
+    }
+    
+    if (fileName == null || fileName.trim().isEmpty()) {
+      return false;
+    }
+    
+    List<Transaction> transactions = model.getTransactions();
+    if (transactions.isEmpty()) {
+      return false;
+    }
+    
+    try {
+      File file = new File(fileName);
+      return exporter.exportTransactions(transactions, file);
+    } catch (IOException e) {
+      e.printStackTrace();
+      return false;
+    }
+  }
+
   public void applyFilter() {
     List<Transaction> filteredTransactions;
     // If no filter is specified, show all transactions.

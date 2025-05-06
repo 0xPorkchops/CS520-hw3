@@ -19,3 +19,5 @@ This code is compiled with ```openjdk 17.0.7 2023-04-18```. Please update your J
 ## Features
 - Add a new transaction: First specify the amount and category. Then click on the Add transaction button. Adds the new transaction to the list and updates the total cost.
 - Filter the transaction list by either amount or category: First specify the amount or category to be matched. Then click the corresponding Filter button. Highlights the matching transactions in the list.
+- Remove a transaction: Select a transaction from the list and click the Remove Transaction button. Removes the selected transaction from the list and updates the total cost.
+- Export to CSV: Click the Export to CSV button to save all current transactions to a CSV file. You'll be prompted to provide a valid file name. The .csv file extension is automatically added to the file name.

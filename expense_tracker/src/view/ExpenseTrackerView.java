@@ -1,12 +1,12 @@
 package view;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import model.Transaction;
 
 public class ExpenseTrackerView extends JFrame {
@@ -14,6 +14,7 @@ public class ExpenseTrackerView extends JFrame {
   private JTable transactionsTable;
   private JButton addTransactionBtn;
   private JButton removeTransactionBtn;
+  private JButton exportToCSVBtn;
   private JFormattedTextField amountField;
   private JTextField categoryField;
   private DefaultTableModel model;
@@ -39,6 +40,7 @@ public class ExpenseTrackerView extends JFrame {
     transactionsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     addTransactionBtn = new JButton("Add Transaction");
     removeTransactionBtn = new JButton("Remove Transaction");
+    exportToCSVBtn = new JButton("Export to CSV");
 
     JLabel amountLabel = new JLabel("Amount:");
     NumberFormat format = NumberFormat.getNumberInstance();
@@ -70,6 +72,7 @@ public class ExpenseTrackerView extends JFrame {
     buttonPanel.add(amountFilterBtn);
     buttonPanel.add(categoryFilterBtn);
     buttonPanel.add(clearFilterBtn);
+    buttonPanel.add(exportToCSVBtn);
     
     add(inputPanel, BorderLayout.NORTH);
     add(new JScrollPane(transactionsTable), BorderLayout.CENTER); 
@@ -157,6 +160,25 @@ public class ExpenseTrackerView extends JFrame {
 
   public JButton getRemoveTransactionBtn() {
     return removeTransactionBtn;
+  }
+  
+  public JButton getExportToCSVBtn() {
+    return exportToCSVBtn;
+  }
+
+  public String getExportFileName() {
+    String fileName = JOptionPane.showInputDialog(this, "Enter file name:");
+    
+    if (fileName == null || fileName.trim().isEmpty()) {
+      return null;
+    }
+    
+    // Append .csv if not already there
+    if (!fileName.toLowerCase().endsWith(".csv")) {
+      fileName += ".csv";
+    }
+    
+    return fileName;
   }
 
   public int getSelectedTransactionIndex() {

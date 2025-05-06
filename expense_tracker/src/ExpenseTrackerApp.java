@@ -1,9 +1,10 @@
-import javax.swing.JOptionPane;
 import controller.ExpenseTrackerController;
+import javax.swing.JOptionPane;
 import model.ExpenseTrackerModel;
-import view.ExpenseTrackerView;
+import model.Export.CSVExporter;
 import model.Filter.AmountFilter;
 import model.Filter.CategoryFilter;
+import view.ExpenseTrackerView;
 
 public class ExpenseTrackerApp {
 
@@ -17,11 +18,10 @@ public class ExpenseTrackerApp {
     ExpenseTrackerView view = new ExpenseTrackerView();
     ExpenseTrackerController controller = new ExpenseTrackerController(model, view);
     
+    controller.setExporter(new CSVExporter());
 
     // Initialize view
     view.setVisible(true);
-
-
 
     // Handle add transaction button clicks
     view.getAddTransactionBtn().addActionListener(e -> {
@@ -34,6 +34,38 @@ public class ExpenseTrackerApp {
       
       if (!added) {
         JOptionPane.showMessageDialog(view, "Invalid amount or category entered");
+        view.toFront();
+      }
+    });
+
+    // Handle remove transaction button clicks
+    view.getRemoveTransactionBtn().addActionListener(e -> {
+      boolean removed = controller.removeTransaction();
+      
+      if (!removed) {
+        JOptionPane.showMessageDialog(view, "Please select a valid transaction to remove");
+        view.toFront();
+      }
+    });
+
+    // Handle export to CSV button clicks
+    view.getExportToCSVBtn().addActionListener(e -> {
+      String fileName = view.getExportFileName();
+      
+      if (fileName != null && !fileName.isEmpty()) {
+        boolean exported = controller.exportTransactions(fileName);
+        
+        if (exported) {
+          JOptionPane.showMessageDialog(view, 
+              "Transactions exported successfully to " + fileName,
+              "Export Successful", 
+              JOptionPane.INFORMATION_MESSAGE);
+        } else {
+          JOptionPane.showMessageDialog(view, 
+              "Failed to export transactions. Ensure there are transactions to export.",
+              "Export Failed", 
+              JOptionPane.ERROR_MESSAGE);
+        }
         view.toFront();
       }
     });
