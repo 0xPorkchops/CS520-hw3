@@ -31,7 +31,7 @@ public class ExpenseTrackerView extends JFrame {
 
   public ExpenseTrackerView() {
     setTitle("Expense Tracker");
-    setSize(600, 400);
+    setSize(800, 400);
 
     String[] columnNames = {"serial", "Amount", "Category", "Date"};
     this.model = new DefaultTableModel(columnNames, 0);
